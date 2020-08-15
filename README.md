@@ -3,9 +3,9 @@
 
 ## Tests
 
-Using node @ 12.0.0:
+Using node @ 10.16.0:
 ```
-$ nvm use 12.0.0
+$ nvm use 10.16.0
 $ npm install
 ```
 
@@ -17,7 +17,7 @@ $ sh ./scripts/startBlockchain.sh
 In another terminal:
 ```
 $ truffle migrate --network test
-$ cd yam
+$ cd jsLib
 $ jest token
 $ jest migration
 ```
