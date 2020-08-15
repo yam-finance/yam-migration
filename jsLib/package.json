@@ -1,14 +1,13 @@
 {
-  "name": "yam-migration",
+  "name": "Topo",
   "version": "1.0.0",
-  "description": "",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yam-finance/yam-migration.git"
+  "description": "JS library for interacting with Topo smart contracts",
+  "main": "./index.js",
+  "type": "module",
+  "author": {
+    "name": "Topo Co."
   },
-  "author": "",
-  "license": "MIT",
-  "homepage": "https://github.com/yam/yam-migration#readme",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.8.3",
@@ -22,8 +21,6 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
-    "@truffle/hdwallet-provider": "^1.0.42",
-    "dotenv-flow": "^3.2.0",
     "node-fetch": "^2.6.0",
     "scrypt-js": "^2.0.4"
   },

@@ -1,13 +1,23 @@
-# REP migration scripts
+# YAM migration
+
 
 ## Tests
 
-On Linux-like OS:
+Using node @ 12.0.0:
 ```
-npm test
+$ nvm use 12.0.0
+$ npm install
 ```
 
-On any OS with Docker:
+Running tests:
 ```
-docker image build --tag rep-migration-scripts .; and docker container run --name rep-migration-scripts --rm -it rep-migration-scripts
+$ sh ./scripts/startBlockchain.sh
+```
+
+In another terminal:
+```
+$ truffle migrate --network test
+$ cd yam
+$ jest token
+$ jest migration
 ```
