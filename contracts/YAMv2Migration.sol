@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
 import "./lib/SafeERC20.sol";
@@ -57,7 +58,7 @@ contract YAMv2Migration is Context, Ownable {
      *
      * One way function. YAMv1 tokens are BURNED. YAMv2 tokens are minted.
      */
-    function migrate() public virtual {
+    function migrate() external virtual  {
         require(block.timestamp >= startTime, "!started");
         require(block.timestamp < startTime + migrationDuration, "migration ended");
 
