@@ -26,4 +26,5 @@ async function deployToken(deployer, network) {
   );
   migrationContract = await YAMv2Migration.deployed();
   await migrationContract.setV2Address(YAMv2.address);
+  await migrationContract.renounceOwnership();
 }

@@ -3,9 +3,11 @@ pragma solidity ^0.6.0;
 import "./lib/SafeERC20.sol";
 import "./lib/Context.sol";
 import "./lib/SafeMath.sol";
+import "./lib/Ownable.sol";
 
 interface YAM {
   function balanceOfUnderlying(address owner) external view returns (uint256);
+  function balanceOf(address owner) external view returns (uint256);
   function yamsScalingFactor() external view returns (uint256);
 }
 
@@ -19,7 +21,7 @@ interface YAMv2 {
  * @dev YAMv2 Mintable Token with migration from legacy contract. Used to signal
  *      for protocol changes in v3.
  */
-contract YAMv2Migration is Context {
+contract YAMv2Migration is Context, Ownable {
 
     using SafeMath for uint256;
 
@@ -33,8 +35,6 @@ contract YAMv2Migration is Context {
 
     uint256 public constant startTime = 1597568400; // TBD!
 
-    uint256 public constant BASE = 10**18;
-
     uint256 public constant internalDecimals = 10**24;
 
     constructor () public {
@@ -45,7 +45,7 @@ contract YAMv2Migration is Context {
      *
      * Not permissioned. One way function. Set in deployment scripts
      */
-    function setV2Address(address yamV2_) public {
+    function setV2Address(address yamV2_) public onlyOwner {
       require(!token_initialized, "already set");
       token_initialized = true;
       yamV2 = yamV2_;
@@ -67,7 +67,16 @@ contract YAMv2Migration is Context {
         // gets the yamValue for a user.
         uint256 yamValue = YAM(yam).balanceOfUnderlying(_msgSender());
 
-        require(yamValue > 0, "No yams");
+        // since balanceOfUnderlying has more decimals than balanceOf,
+        // we cant transfer the entirety of balanceOfUnderlying.
+        // we have no method of decrementing balanceOfUnderlying directly,
+        // as this is not intended use.
+        // remainder is guaranteed to be less than 10^-18
+        // not a perfect solution, but is not profitable to do in almost any
+        // gas environment
+        // requires migrating 10000000000000000000 times to mint an additional
+        // underlying yam
+        require(YAM(yam).balanceOf(_msgSender()) > 0, "No yams");
 
         // gets transferFrom amount by multiplying by scaling factor / 10**24
         // equivalent to balanceOf, but we need underlyingAmount later
@@ -76,7 +85,9 @@ contract YAMv2Migration is Context {
         // BURN YAM - UNRECOVERABLE.
         SafeERC20.safeTransferFrom(
             IERC20(yam),
-            _msgSender(), address(0x000000000000000000000000000000000000dEaD), transferAmount
+            _msgSender(),
+            address(0x000000000000000000000000000000000000dEaD),
+            transferAmount
         );
 
         // mint new YAMv2, using yamValue (1e24 decimal token, to match internalDecimals)
