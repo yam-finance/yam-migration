@@ -43,7 +43,7 @@ contract YAMv2Migration is Context, Ownable {
     /**
      * @dev Sets yamV2 token address
      *
-     * Not permissioned. One way function. Set in deployment scripts
+     * One way function. Set in deployment scripts
      */
     function setV2Address(address yamV2_) public onlyOwner {
       require(!token_initialized, "already set");
