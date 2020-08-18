@@ -60,12 +60,17 @@ contract YAMv2Migration is Context, Ownable {
     function migrate() public virtual {
         require(block.timestamp >= startTime, "!started");
         require(block.timestamp < startTime + migrationDuration, "migration ended");
+        require(token_initialized, "YAMv2 not set yet");
 
         // current scalingFactor
         uint256 scalingFactor = YAM(yam).yamsScalingFactor();
 
         // gets the yamValue for a user.
         uint256 yamValue = YAM(yam).balanceOfUnderlying(_msgSender());
+
+        // gets transferFrom amount by multiplying by scaling factor / 10**24
+        // equivalent to balanceOf, but we need underlyingAmount later
+        uint256 transferAmount = yamValue.mul(scalingFactor).div(internalDecimals);
 
         // since balanceOfUnderlying has more decimals than balanceOf,
         // we cant transfer the entirety of balanceOfUnderlying.
@@ -76,11 +81,8 @@ contract YAMv2Migration is Context, Ownable {
         // gas environment
         // requires migrating 10000000000000000000 times to mint an additional
         // underlying yam
-        require(YAM(yam).balanceOf(_msgSender()) > 0, "No yams");
+        require(transferAmount > 0, "No yams");
 
-        // gets transferFrom amount by multiplying by scaling factor / 10**24
-        // equivalent to balanceOf, but we need underlyingAmount later
-        uint256 transferAmount = yamValue.mul(scalingFactor).div(internalDecimals);
 
         // BURN YAM - UNRECOVERABLE.
         SafeERC20.safeTransferFrom(
