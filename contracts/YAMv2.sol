@@ -5,7 +5,6 @@ pragma solidity ^0.6.0;
 import "./lib/Context.sol";
 import "./lib/IERC20.sol";
 import "./lib/SafeMath.sol";
-import "./lib/Address.sol";
 
 
 
@@ -16,7 +15,6 @@ import "./lib/Address.sol";
   */
 contract YAMv2 is Context, IERC20 {
     using SafeMath for uint256;
-    using Address for address;
 
     address public minter;
 
