@@ -2,9 +2,9 @@
 
 pragma solidity ^0.6.0;
 
-import "./lib/Context.sol";
-import "./lib/IERC20.sol";
-import "./lib/SafeMath.sol";
+import { Context } from "./lib/Context.sol";
+import { IERC20 } from "./lib/IERC20.sol";
+import { SafeMath } from "./lib/SafeMath.sol";
 
 
 
