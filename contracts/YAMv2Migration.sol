@@ -33,7 +33,7 @@ contract YAMv2Migration is Context, Ownable {
 
     uint256 public constant migrationDuration = 3 days;
 
-    uint256 public constant startTime = 1597568400; // TBD!
+    uint256 public constant startTime = 1597854000; //08/19/2020 @ 4:20pm (UTC)
 
     uint256 public constant internalDecimals = 10**24;
 
